@@ -25,6 +25,7 @@
 #include <stdlib.h>  // srand() and random() functions
 
 #include "ece198.h"
+#include "LiquidCrystal.h"
 
 int main(void)
 {
