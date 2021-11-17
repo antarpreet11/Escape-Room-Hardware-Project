@@ -8,10 +8,10 @@
 // To run a particular example, you should remove the comment (//) in
 // front of exactly ONE of the following lines:
 
-#define BUTTON_BLINK
+//#define BUTTON_BLINK
 // #define LIGHT_SCHEDULER
 // #define TIME_RAND
-// #define KEYPAD
+#define KEYPAD
 // #define KEYPAD_CONTROL
 // #define SEVEN_SEGMENT
 // #define KEYPAD_SEVEN_SEGMENT
