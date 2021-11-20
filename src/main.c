@@ -8,10 +8,10 @@
 // To run a particular example, you should remove the comment (//) in
 // front of exactly ONE of the following lines:
 
-//#define BUTTON_BLINK
+// #define BUTTON_BLINK
 // #define LIGHT_SCHEDULER
 // #define TIME_RAND
-#define KEYPAD
+ #define KEYPAD
 // #define KEYPAD_CONTROL
 // #define SEVEN_SEGMENT
 // #define KEYPAD_SEVEN_SEGMENT
@@ -19,6 +19,8 @@
 // #define ROTARY_ENCODER
 // #define ANALOG
 // #define PWM
+
+void Initialize_Attempt();
 
 #include <stdbool.h> // booleans, i.e. true and false
 #include <stdio.h>   // sprintf() function
@@ -53,20 +55,6 @@ int main(void)
     // as mentioned above, only one of the following code sections will be used
     // (depending on which of the #define statements at the top of this file has been uncommented)
 
-#ifdef BUTTON_BLINK
-    // Wait for the user to push the blue button, then blink the LED.
-
-    // wait for button press (active low)
-    while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
-    {
-    }
-
-    while (1) // loop forever, blinking the LED
-    {
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-        HAL_Delay(250);  // 250 milliseconds == 1/4 second
-    }
-#endif
 
 #ifdef LIGHT_SCHEDULER
     // Turn on the LED five seconds after reset, and turn it off again five seconds later.
@@ -115,13 +103,23 @@ int main(void)
     // this string contains the symbols on the external keypad
     // (they may be different for different keypads)
     char *keypad_symbols = "123A456B789C*0#D";
+    char str_input[1000];
+    int i = 0;
     // note that they're numbered from left to right and top to bottom, like reading words on a page
 
     InitializeKeypad();
     while (true)
-    {
+    {   
         while (ReadKeypad() < 0);   // wait for a valid key
-        SerialPutc(keypad_symbols[ReadKeypad()]);  // look up its ASCII symbol and send it to the hsot
+        SerialPutc(keypad_symbols[ReadKeypad()]);
+        str_input[i] = keypad_symbols[ReadKeypad()]; // look up its ASCII symbol and send it to the hsot
+        if(str_input[i] == 'A')
+        {
+            SerialPutc('S');
+            SerialPutc('S');
+        }
+        i++;
+          
         while (ReadKeypad() >= 0);  // wait until key is released
     }
 #endif
@@ -191,80 +189,6 @@ int main(void)
         }
     }
 #endif
-
-#ifdef ROTARY_ENCODER
-    // Read values from the rotary encoder and update a count, which is displayed in the console.
-
-    InitializePin(GPIOB, GPIO_PIN_5, GPIO_MODE_INPUT, GPIO_PULLUP, 0);   // initialize CLK pin
-    InitializePin(GPIOB, GPIO_PIN_4, GPIO_MODE_INPUT, GPIO_PULLUP, 0);   // initialize DT pin
-    InitializePin(GPIOB, GPIO_PIN_10, GPIO_MODE_INPUT, GPIO_PULLUP, 0);  // initialize SW pin
-    
-    bool previousClk = false;  // needed by ReadEncoder() to store the previous state of the CLK pin
-    int count = 0;             // this gets incremented or decremented as we rotate the encoder
-
-    while (true)
-    {
-        int delta = ReadEncoder(GPIOB, GPIO_PIN_5, GPIOB, GPIO_PIN_4, &previousClk);  // update the count by -1, 0 or +1
-        if (delta != 0) {
-            count += delta;
-            char buff[100];
-            sprintf(buff, "%d  \r", count);
-            SerialPuts(buff);
-        }
-        bool sw = !HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);  // read the push-switch on the encoder (active low, so we invert it using !)
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, sw);  // turn on LED when encoder switch is pushed in
-    }
-#endif
-
-#ifdef ANALOG
-    // Use the ADC (Analog to Digital Converter) to read voltage values from two pins.
-
-    __HAL_RCC_ADC1_CLK_ENABLE();        // enable ADC 1
-    ADC_HandleTypeDef adcInstance;      // this variable stores an instance of the ADC
-    InitializeADC(&adcInstance, ADC1);  // initialize the ADC instance
-    // Enables the input pins
-    // (on this board, pin A0 is connected to channel 0 of ADC1, and A1 is connected to channel 1 of ADC1)
-    InitializePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1, GPIO_MODE_ANALOG, GPIO_NOPULL, 0);   
-    while (true)
-    {
-        // read the ADC values (0 -> 0V, 2^12 -> 3.3V)
-        uint16_t raw0 = ReadADC(&adcInstance, ADC_CHANNEL_0);
-        uint16_t raw1 = ReadADC(&adcInstance, ADC_CHANNEL_1);
-
-        // print the ADC values
-        char buff[100];
-        sprintf(buff, "Channel0: %hu, Channel1: %hu\r\n", raw0, raw1);  // hu == "unsigned short" (16 bit)
-        SerialPuts(buff);
-    }
-#endif
-
-#ifdef PWM
-    // Use Pulse Width Modulation to fade the LED in and out.
-    uint16_t period = 100, prescale = 16;
-
-    __TIM2_CLK_ENABLE();  // enable timer 2
-    TIM_HandleTypeDef pwmTimerInstance;  // this variable stores an instance of the timer
-    InitializePWMTimer(&pwmTimerInstance, TIM2, period, prescale);   // initialize the timer instance
-    InitializePWMChannel(&pwmTimerInstance, TIM_CHANNEL_1);          // initialize one channel (can use others for motors, etc)
-
-    InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_AF_PP, GPIO_NOPULL, GPIO_AF1_TIM2); // connect the LED to the timer output
-
-    while (true)
-    {
-        // fade the LED in by slowly increasing the duty cycle
-        for (uint32_t i = 0; i < period; ++i)
-        {
-            SetPWMDutyCycle(&pwmTimerInstance, TIM_CHANNEL_1, i);
-            HAL_Delay(5);
-        }
-        // fade the LED out by slowly decreasing the duty cycle
-        for (uint32_t i = period; i > 0; --i)
-        {
-            SetPWMDutyCycle(&pwmTimerInstance, TIM_CHANNEL_1, i);
-            HAL_Delay(5);
-        }
-    }
-#endif
     return 0;
 }
 
@@ -273,4 +197,11 @@ void SysTick_Handler(void)
 {
     HAL_IncTick(); // tell HAL that a new tick has happened
     // we can do other things in here too if we need to, but be careful
+}
+
+void Initialize_Attempt()
+{
+    LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
+    setCursor(0,0);
+    print("Hello, World!");
 }
