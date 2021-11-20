@@ -18,6 +18,7 @@
 // #define COLOR_LED
 
 void Initialize_Attempt();
+int keypad_control(int ans);
 
 #include <stdbool.h> // booleans, i.e. true and false
 #include <stdio.h>   // sprintf() function
@@ -51,7 +52,7 @@ int main(void)
 
     // as mentioned above, only one of the following code sections will be used
     // (depending on which of the #define statements at the top of this file has been uncommented)
-
+    keypad_control(3);
 
 #ifdef LIGHT_SCHEDULER
     // Turn on the LED five seconds after reset, and turn it off again five seconds later.
@@ -123,34 +124,7 @@ int main(void)
 
 #ifdef KEYPAD_CONTROL
     // Use top-right button on 4x4 keypad (typically 'A') to toggle LED.
-
-    InitializeKeypad();
-    while (true)
-    {
-        while (ReadKeypad() < 0);   // wait for a valid key
-        int key = ReadKeypad();
-        int j = 0;
-        if (key == 3 || key == 11)  // top-right key in a 4x4 keypad, usually 'A'
-            while(j < 5)   // toggle LED on or off
-            {
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(50);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(100);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(50);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(100);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(50);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(100);
-                j++;
-            }
-        else
-            HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
-         while (ReadKeypad() >= 0);  // wait until key is released
-    }
+    
 #endif
 
 #ifdef SEVEN_SEGMENT
@@ -221,7 +195,41 @@ void Initialize_Attempt()
     print("Hello, World!");
 }
 
-void questionaire()
+int keypad_control(int ans)
 {
-
+    InitializeKeypad();
+    int xx = 0;
+    int right = 0;
+    while (xx < 3)
+    {
+        while (ReadKeypad() < 0);   // wait for a valid key
+        int key = ReadKeypad();
+        int j = 0;
+        if (key == ans)  // top-right key in a 4x4 keypad, usually 'A'
+        {    while(j < 5)   // toggle LED on or off
+            {
+                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(50);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(100);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(50);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(100);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(50);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(100);
+                j++;
+            }
+            right = 1;
+        }
+        if(right == 1)
+        {
+            break;
+        }    
+        xx++;
+        while (ReadKeypad() >= 0);  // wait until key is released
+    }
+    return 0;
 }
