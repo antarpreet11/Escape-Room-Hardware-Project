@@ -11,14 +11,11 @@
 // #define BUTTON_BLINK
 // #define LIGHT_SCHEDULER
 // #define TIME_RAND
- #define KEYPAD
-// #define KEYPAD_CONTROL
+// #define KEYPAD
+#define KEYPAD_CONTROL
 // #define SEVEN_SEGMENT
 // #define KEYPAD_SEVEN_SEGMENT
 // #define COLOR_LED
-// #define ROTARY_ENCODER
-// #define ANALOG
-// #define PWM
 
 void Initialize_Attempt();
 
@@ -36,7 +33,7 @@ int main(void)
     // Peripherals (including GPIOs) are disabled by default to save power, so we
     // use the Reset and Clock Control registers to enable the GPIO peripherals that we're using.
 
-    __HAL_RCC_GPIOA_CLK_ENABLE(); // enable port A (for the on-board LED, for example)
+    __HAL_RCC_GPIOA_CLK_ENABLE(); // enable port A (for the on-board LsED, for example)
     __HAL_RCC_GPIOB_CLK_ENABLE(); // enable port B (for the rotary encoder inputs, for example)
     __HAL_RCC_GPIOC_CLK_ENABLE(); // enable port C (for the on-board blue pushbutton, for example)
 
@@ -103,7 +100,7 @@ int main(void)
     // this string contains the symbols on the external keypad
     // (they may be different for different keypads)
     char *keypad_symbols = "123A456B789C*0#D";
-    char str_input[1000];
+    char str_input[100];
     int i = 0;
     // note that they're numbered from left to right and top to bottom, like reading words on a page
 
@@ -132,8 +129,26 @@ int main(void)
     {
         while (ReadKeypad() < 0);   // wait for a valid key
         int key = ReadKeypad();
-        if (key == 3)  // top-right key in a 4x4 keypad, usually 'A'
-            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);   // toggle LED on or off
+        int j = 0;
+        if (key == 3 || key == 11)  // top-right key in a 4x4 keypad, usually 'A'
+            while(j < 5)   // toggle LED on or off
+            {
+                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(50);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(100);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(50);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(100);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(50);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(100);
+                j++;
+            }
+        else
+            HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
          while (ReadKeypad() >= 0);  // wait until key is released
     }
 #endif
@@ -204,4 +219,9 @@ void Initialize_Attempt()
     LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
     setCursor(0,0);
     print("Hello, World!");
+}
+
+void questionaire()
+{
+
 }
