@@ -12,7 +12,6 @@
 // #define LIGHT_SCHEDULER
 // #define TIME_RAND
 // #define KEYPAD
-#define KEYPAD_CONTROL
 // #define SEVEN_SEGMENT
 // #define KEYPAD_SEVEN_SEGMENT
 // #define COLOR_LED
@@ -122,11 +121,6 @@ int main(void)
     }
 #endif
 
-#ifdef KEYPAD_CONTROL
-    // Use top-right button on 4x4 keypad (typically 'A') to toggle LED.
-    
-#endif
-
 #ifdef SEVEN_SEGMENT
     // Display the numbers 0 to 9 inclusive on the 7-segment display, pausing for a second between each one.
     // (remember that the GND connection on the display must go through a 220 ohm current-limiting resistor!)
@@ -213,9 +207,9 @@ int keypad_control(int ans)
 	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 	            HAL_Delay(100);
 	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(50);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 	            HAL_Delay(100);
+	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_Delay(200);
 	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 	            HAL_Delay(50);
 	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
