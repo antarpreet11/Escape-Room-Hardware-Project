@@ -166,7 +166,16 @@ void lcd_printing()
             print("A(3) B(2) C(9) D(27)");
             keypad_control(answers[k]);
         }
-        
+        else if(k == 1){
+            print("Square root of 729?");
+            clear();
+            setCursor(0,0);
+            print("A(29) B(37) C(9) D(27)");
+            keypad_control(answers[k]);
+        }
+        clear();
+        setCursor(0,0);
+        HAL_Delay(5000);
     }
 }
 
