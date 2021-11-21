@@ -165,12 +165,12 @@ int keypad_control(int ans)
     InitializeKeypad();
     int xxx = 0;
     int right = 0;
-    while (xxx < 3)
+    while (xxx < 4)
     {
         while (ReadKeypad() < 0);   // wait for a valid key
-        int key = ReadKeypad();
+        int input = ReadKeypad();
         int j = 0;
-        if (key == ans)  // top-right key in a 4x4 keypad, usually 'A'
+        if (input == ans)  // top-right key in a 4x4 keypad, usually 'A'
         {    while(j < 5)   // toggle LED on or off
             {
                 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
@@ -189,12 +189,19 @@ int keypad_control(int ans)
             }
             right = 1;
         }
+        else if(input != ans)
+        {
+            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	        HAL_Delay(1000);
+	        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+        }
         if(right == 1)
         {
             break;
         }    
-        xxx++;
+        
         while (ReadKeypad() >= 0);  // wait until key is released
+        xxx++;
     }
     return 0;
 }
