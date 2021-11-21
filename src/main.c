@@ -18,11 +18,11 @@
 
 void Initialize_Attempt();
 int keypad_control(int ans);
+void lcd_printing();
 
 #include <stdbool.h> // booleans, i.e. true and false
 #include <stdio.h>   // sprintf() function
 #include <stdlib.h>  // srand() and random() functions
-
 #include "ece198.h"
 #include "LiquidCrystal.h"
 
@@ -41,17 +41,14 @@ int main(void)
 
     InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // on-board LED
 
-    // note: the on-board pushbutton is fine with the default values (no internal pull-up resistor
-    // is required, since there's one on the board)
-
-    // set up for serial communication to the host computer
-    // (anything we write to the serial port will appear in the terminal (i.e. serial monitor) in VSCode)
 
     SerialSetup(9600);
 
-    // as mentioned above, only one of the following code sections will be used
-    // (depending on which of the #define statements at the top of this file has been uncommented)
-    keypad_control(3);
+
+
+
+
+    lcd_printing();
 
 #ifdef LIGHT_SCHEDULER
     // Turn on the LED five seconds after reset, and turn it off again five seconds later.
@@ -153,20 +150,23 @@ void SysTick_Handler(void)
     // we can do other things in here too if we need to, but be careful
 }
 
-void Initialize_Attempt()
+void lcd_printing()
 {
+    int answers[2] = {3 , 11};
     LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
     setCursor(0,0);
     print("Welcome to Escape Room Games!");
+    clear();
+    setCursor(0,0);
     for(int k = 0; k<2; k++){
-        if(k == 1){
+        if(k == 0){
             print("What are the prime factors of 27?");
+            clear();
+            setCursor(0,0);
             print("A(3) B(2) C(9) D(27)");
+            keypad_control(answers[k]);
         }
-        else if(k == 2){
-            print("Square root of 729?");
-            print("A(9) B(37) C(29) D(27)");
-        }
+        
     }
 }
 
