@@ -181,7 +181,7 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
 
 int keypad_control(int ans)
 {
-    InitializeKeypad();
+    InitializeKeypad(); 
     int xxx = 0;
     int right = 0;
     while (xxx < 4)
@@ -190,20 +190,12 @@ int keypad_control(int ans)
         int input = ReadKeypad();
         int j = 0;
         if (input == ans)  // top-right key in a 4x4 keypad, usually 'A'
-        {    while(j < 5)   // toggle LED on or off
+        {    while(j < 20)   // toggle LED on or off
             {
                 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 	            HAL_Delay(50);
 	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(100);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(100);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(200);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 	            HAL_Delay(50);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	            HAL_Delay(100);
                 j++;
             }
             right = 1;
