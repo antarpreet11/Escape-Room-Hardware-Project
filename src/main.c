@@ -218,7 +218,7 @@ void Initialize_Attempt()
 {
     LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
     setCursor(0,0);
-    print("Hello, World!");
+    print("Welcome to Escape Room Games!");
 }
 
 void questionaire()
