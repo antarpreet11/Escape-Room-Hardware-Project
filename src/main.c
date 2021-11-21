@@ -65,35 +65,6 @@ int main(void)
     }
 #endif
 
-#ifdef TIME_RAND
-    // This illustrates the use of HAL_GetTick() to get the current time,
-    // plus the use of random() for random number generation.
-    
-    // Note that you must have "#include <stdlib.h>"" at the top of your main.c
-    // in order to use the srand() and random() functions.
-
-    // while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));  // wait for button press
-    // srand(HAL_GetTick());  // set the random seed to be the time in ms that it took to press the button
-    // if the line above is commented out, your program will get the same sequence of random numbers
-    // every time you run it (which may be useful in some cases)
-
-    while (true) // loop forever
-    {
-        while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));  // wait for button press
-
-        // Display the time in milliseconds along with a random number.
-        // We use the sprintf() function to put the formatted output into a buffer;
-        // see https://www.tutorialspoint.com/c_standard_library/c_function_sprintf.htm for more
-        // information about this function
-        char buff[100];
-        sprintf(buff, "Time: %lu ms   Random = %ld\r\n", HAL_GetTick(), random());
-        // lu == "long unsigned", ld = "long decimal", where "long" is 32 bit and "decimal" implies signed
-        SerialPuts(buff); // transmit the buffer to the host computer's serial monitor in VSCode/PlatformIO
-
-        while (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));  // wait for button to be released
-    }
-#endif
-
 #ifdef KEYPAD
     // Read buttons on the keypad and display them on the console.
 
