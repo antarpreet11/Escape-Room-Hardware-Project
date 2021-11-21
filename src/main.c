@@ -40,7 +40,7 @@ int main(void)
     // initialize the pins to be input, output, alternate function, etc...
 
     InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // on-board LED
-
+    
 
     SerialSetup(9600);
 
@@ -158,6 +158,7 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
     print("Welcome to Escape Room Games!");
     clear();
     setCursor(0,0);
+    
     for(int k = 0; k<2; k++){
         if(k == 0){
             print("What are the prime factors of 27?"); // Displays first question on LCD
@@ -184,17 +185,19 @@ int keypad_control(int ans)
     InitializeKeypad(); 
     int xxx = 0;
     int right = 0;
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
     while (xxx < 4) // Allows for up to 3 attempts to select the right answer
     {
         while (ReadKeypad() < 0);   // wait for a valid key
         int input = ReadKeypad();
         int j = 0;
         if (input == ans)  // top-right key in a 4x4 keypad, usually 'A'
-        {    while(j < 20)   // toggle LED on or off
+        {   while(j < 20)   // toggle LED on or off
             {
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+                HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
 	            HAL_Delay(50);
-	            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	            HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
 	            HAL_Delay(50);
                 j++;
             }
@@ -202,9 +205,14 @@ int keypad_control(int ans)
         }
         else if(input != ans)
         {
-            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	        HAL_Delay(1000);
-	        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+            while(j < 20)   // toggle LED on or off
+            {
+                HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
+	            HAL_Delay(50);
+	            HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
+	            HAL_Delay(50);
+                j++;
+            }
         }
         if(right == 1)
         {
