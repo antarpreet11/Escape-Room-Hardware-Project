@@ -157,7 +157,17 @@ void Initialize_Attempt()
 {
     LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
     setCursor(0,0);
-    print("Hello, World!");
+    print("Welcome to Escape Room Games!");
+    for(int k{0}; k<2; k++){
+        if(k == 1){
+            print("What are the prime factors of 27?");
+            print("A(3) B(2) C(9) D(27)");
+        }
+        else if(k == 2){
+            print("Square root of 729?");
+            print("A(9) B(37) C(29) D(27)")
+        }
+    }
 }
 
 int keypad_control(int ans)
