@@ -160,18 +160,18 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
     setCursor(0,0);
     for(int k = 0; k<2; k++){
         if(k == 0){
-            print("What are the prime factors of 27?");
-            clear();
+            print("What are the prime factors of 27?"); // Displays first question on LCD
+            clear(); // Clears the question
             setCursor(0,0);
-            print("A(3) B(2) C(9) D(27)");
-            keypad_control(answers[k]);
+            print("A(3) B(2) C(9) D(27)"); // Displays options to choose from
+            keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to select the correct response
         }
         else if(k == 1){
-            print("Square root of 729?");
-            clear();
+            print("Square root of 729?"); // Displays second question on LCD
+            clear(); // Clears the question
             setCursor(0,0);
-            print("A(29) B(37) C(9) D(27)");
-            keypad_control(answers[k]);
+            print("A(29) B(37) C(9) D(27)"); // Displays options to choose from
+            keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to selct the correct response
         }
         clear();
         setCursor(0,0);
@@ -184,7 +184,7 @@ int keypad_control(int ans)
     InitializeKeypad();
     int xxx = 0;
     int right = 0;
-    while (xxx < 4)
+    while (xxx < 4) // Allows for up to 3 attempts to select the right answer
     {
         while (ReadKeypad() < 0);   // wait for a valid key
         int input = ReadKeypad();
@@ -216,7 +216,7 @@ int keypad_control(int ans)
         }
         if(right == 1)
         {
-            break;
+            break; // If the correct answer is selected within the 3 attempts, the LED will flash and you cannot select anymore times
         }    
         
         while (ReadKeypad() >= 0);  // wait until key is released
