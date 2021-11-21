@@ -178,7 +178,14 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
             clear(); // Clears the question
             setCursor(0,0);
             print("A(4) B(3) C(2) D(1)"); // Displays options to choose from (Correct Answer: B)
-            keypad_control(answers[k]);
+            keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to select the correct response
+        }
+        else if(k == 3){
+            print("How many factors does 218 have?") // Displays fourth question on LCD
+            clear(); // Clears question
+            setCursor(0,0);
+            print("A(12) B(7) C(16) D(10)") // Displays options to choose from (Correct Answer: C)
+            keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to select the correct response
         }
         clear();
         setCursor(0,0);
