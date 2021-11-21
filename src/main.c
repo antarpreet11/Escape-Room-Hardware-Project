@@ -150,7 +150,7 @@ void SysTick_Handler(void)
     // we can do other things in here too if we need to, but be careful
 }
 
-void lcd_printing()
+void lcd_printing() //function designed to print to the LCD and execute the question/answers part of the project
 {
     int answers[2] = {3 , 11};
     LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
