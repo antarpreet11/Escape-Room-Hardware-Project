@@ -152,27 +152,40 @@ void SysTick_Handler(void)
 
 void lcd_printing() //function designed to print to the LCD and execute the question/answers part of the project
 {
-    int answers[2] = {3 , 11};
+    int answers[4] = {3 , 15, 7, 11};
     LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
     setCursor(0,0);
     print("Welcome to Escape Room Games!");
     clear();
     setCursor(0,0);
-    
-    for(int k = 0; k<2; k++){
+    for(int k = 0; k<4; k++){
         if(k == 0){
             print("What are the prime factors of 27?"); // Displays first question on LCD
             clear(); // Clears the question
             setCursor(0,0);
-            print("A(3) B(2) C(9) D(27)"); // Displays options to choose from
+            print("A(3) B(2) C(9) D(27)"); // Displays options to choose from (Correct Answer: A)
             keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to select the correct response
         }
         else if(k == 1){
             print("Square root of 729?"); // Displays second question on LCD
             clear(); // Clears the question
             setCursor(0,0);
-            print("A(29) B(37) C(9) D(27)"); // Displays options to choose from
+            print("A(29) B(37) C(9) D(27)"); // Displays options to choose from (Correct Answer: D)
             keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to selct the correct response
+        }
+        else if(k == 2){
+            print("Syllables in Dinosaur?"); // Displays third question on LCD
+            clear(); // Clears the question
+            setCursor(0,0);
+            print("A(4) B(3) C(2) D(1)"); // Displays options to choose from (Correct Answer: B)
+            keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to select the correct response
+        }
+        else if(k == 3){
+            print("How many factors does 218 have?"); // Displays fourth question on LCD
+            clear(); // Clears question
+            setCursor(0,0);
+            print("A(12) B(7) C(16) D(10)"); // Displays options to choose from (Correct Answer: C)
+            keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to select the correct response
         }
         clear();
         setCursor(0,0);
