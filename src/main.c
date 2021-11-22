@@ -43,24 +43,9 @@ int main(void)
     
 
     SerialSetup(9600);
-
-
-
-
-
     lcd_printing();
 
-#ifdef LIGHT_SCHEDULER
-    // Turn on the LED five seconds after reset, and turn it off again five seconds later.
 
-    while (true) {
-        uint32_t now = HAL_GetTick();
-        if (now > 5000 && now < 10000)
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, true);   // turn on LED
-        else
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, false);  // turn off LED
-    }
-#endif
 
 #ifdef KEYPAD
     // Read buttons on the keypad and display them on the console.
@@ -158,7 +143,8 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
     print("Welcome to Escape Room Games!");
     clear();
     setCursor(0,0);
-    for(int k = 0; k<4; k++){
+    for(int k = 0; k<4; k++)
+    {
         if(k == 0){
             print("What are the prime factors of 27?"); // Displays first question on LCD
             clear(); // Clears the question
@@ -187,6 +173,7 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
             print("A(12) B(7) C(16) D(10)"); // Displays options to choose from (Correct Answer: C)
             keypad_control(answers[k]); // Access Keypad_Control function, which allows for 3 attempts to select the correct response
         }
+
         clear();
         setCursor(0,0);
         HAL_Delay(300);
@@ -223,7 +210,7 @@ int keypad_control(int ans)
         }
         else if(input != ans)
         {
-            while(j < 20)   // toggle LED on or off
+            while(j < 15)   // toggle LED on or off
             {
                 HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
 	            HAL_Delay(50);
