@@ -45,96 +45,6 @@ int main(void)
     SerialSetup(9600);
     lcd_printing();
 
-
-
-#ifdef KEYPAD
-    // Read buttons on the keypad and display them on the console.
-
-    // this string contains the symbols on the external keypad
-    // (they may be different for different keypads)
-    char *keypad_symbols = "123A456B789C*0#D";
-    char str_input[100];
-    int i = 0;
-    // note that they're numbered from left to right and top to bottom, like reading words on a page
-
-    InitializeKeypad();
-    while (true)
-    {   
-        while (ReadKeypad() < 0);   // wait for a valid key
-        SerialPutc(keypad_symbols[ReadKeypad()]);
-        str_input[i] = keypad_symbols[ReadKeypad()]; // look up its ASCII symbol and send it to the hsot
-        if(str_input[i] == 'A')
-        {
-            SerialPutc('S');
-            SerialPutc('S');
-        }
-        i++;
-          
-        while (ReadKeypad() >= 0);  // wait until key is released
-    }
-#endif
-
-#ifdef SEVEN_SEGMENT
-    // Display the numbers 0 to 9 inclusive on the 7-segment display, pausing for a second between each one.
-    // (remember that the GND connection on the display must go through a 220 ohm current-limiting resistor!)
-    
-    Initialize7Segment();
-    while (true)
-        for (int i = 0; i < 10; ++i)
-        {
-            Display7Segment(i);
-            HAL_Delay(1000);  // 1000 milliseconds == 1 second
-        }
-#endif
-
-#ifdef KEYPAD_SEVEN_SEGMENT
-    // Combines the previous two examples, displaying numbers from the keypad on the 7-segment display.
-
-    // this string contains the symbols on the external keypad
-    // (they may be different for different keypads)
-    char *keypad_symbols = "123A456B789C*0#D";
-    // note that they're numbered from left to right and top to bottom, like reading words on a page
-
-    InitializeKeypad();
-    Initialize7Segment();
-    while (true)
-    {
-        int key = ReadKeypad();
-        if (key >= 0)
-            Display7Segment(keypad_symbols[key]-'0');  // tricky code to convert ASCII digit to a number
-    }
-#endif
-
-#ifdef COLOR_LED
-    // Cycle through all 8 possible colors (including off and white) as the on-board button is pressed.
-    // This example assumes that the color LED is connected to pins D11, D12 and D13.
-
-    // Remember that each of those three pins must go through a 220 ohm current-limiting resistor!
-    // Also remember that the longest pin on the LED should be hooked up to GND.
-
-    InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // initialize color LED output pins
-    while (true) {
-        for (int color = 0; color < 8; ++color) {
-            // bottom three bits indicate which of the three LEDs should be on (eight possible combinations)
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, color & 0x01);  // blue  (hex 1 == 0001 binary)
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, color & 0x02);  // green (hex 2 == 0010 binary)
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, color & 0x04);  // red   (hex 4 == 0100 binary)
-
-            while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));   // wait for button press 
-            while (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));  // wait for button release
-        }
-    }
-#endif
-    return 0;
-}
-
-// This function is called by the HAL once every millisecond
-void SysTick_Handler(void)
-{
-    HAL_IncTick(); // tell HAL that a new tick has happened
-    // we can do other things in here too if we need to, but be careful
-}
-
 void lcd_printing() //function designed to print to the LCD and execute the question/answers part of the project
 {
     int answers[4] = {3 , 15, 7, 11};
@@ -176,7 +86,7 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
 
         clear();
         setCursor(0,0);
-        HAL_Delay(400);
+        HAL_Delay(300);
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
         HAL_Delay(2000);
