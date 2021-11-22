@@ -6,6 +6,7 @@
 void Initialize_Attempt();
 int keypad_control(int ans);
 void lcd_printing();
+void conclusion(int n);
 
 #include <stdbool.h> // booleans, i.e. true and false
 #include <stdio.h>   // sprintf() function
@@ -130,4 +131,9 @@ int keypad_control(int ans)
         xxx++;
     }
     return 0;
+}
+
+void conclusion(int n)
+{
+    
 }
