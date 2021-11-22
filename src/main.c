@@ -189,7 +189,12 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
         }
         clear();
         setCursor(0,0);
-        HAL_Delay(5000);
+        HAL_Delay(300);
+        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
+        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
+        HAL_Delay(2000);
+        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
+        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
     }
 }
 
@@ -200,7 +205,7 @@ int keypad_control(int ans)
     int right = 0;
     HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
     HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
-    while (xxx < 4) // Allows for up to 3 attempts to select the right answer
+    while (xxx < 3) // Allows for up to 3 attempts to select the right answer
     {
         while (ReadKeypad() < 0);   // wait for a valid key
         int input = ReadKeypad();
