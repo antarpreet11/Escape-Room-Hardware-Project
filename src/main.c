@@ -1,20 +1,7 @@
 // Sample code for ECE 198
 
 // Written by Bernie Roehl, August 2021
-
-// This file contains code for a number of different examples.
-// Each one is surrounded by an #ifdef ... #endif block inside of main().
-
-// To run a particular example, you should remove the comment (//) in
-// front of exactly ONE of the following lines:
-
-// #define BUTTON_BLINK
-// #define LIGHT_SCHEDULER
-// #define TIME_RAND
-// #define KEYPAD
-// #define SEVEN_SEGMENT
-// #define KEYPAD_SEVEN_SEGMENT
-// #define COLOR_LED
+// Edited by Antarpreet and Rahavan, November 2021 
 
 void Initialize_Attempt();
 int keypad_control(int ans);
@@ -43,6 +30,11 @@ int main(void)
 
     SerialSetup(9600);
     lcd_printing();
+}
+
+void SysTick_Handler(void)
+{
+    HAL_IncTick(); // tell HAL that a new tick has happened
 }
 
 void lcd_printing() //function designed to print to the LCD and execute the question/answers part of the project
