@@ -40,10 +40,10 @@ int main(void)
     // initialize the pins to be input, output, alternate function, etc...
 
     InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // on-board LED
-    
 
     SerialSetup(9600);
     lcd_printing();
+}
 
 void lcd_printing() //function designed to print to the LCD and execute the question/answers part of the project
 {
@@ -57,7 +57,6 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
     {
         if(k == 0){
             print("What are the prime factors of 27?"); // Displays first question on LCD
-            HAL_Delay(5000);
             clear(); // Clears the question
             setCursor(0,0);
             print("A(3) B(2) C(9) D(27)"); // Displays options to choose from (Correct Answer: A)
@@ -65,7 +64,6 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
         }
         else if(k == 1){
             print("Square root of 729?"); // Displays second question on LCD
-            HAL_Delay(5000);
             clear(); // Clears the question
             setCursor(0,0);
             print("A(29) B(37) C(9) D(27)"); // Displays options to choose from (Correct Answer: D)
@@ -73,7 +71,6 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
         }
         else if(k == 2){
             print("Syllables in Dinosaur?"); // Displays third question on LCD
-            HAL_Delay(5000);
             clear(); // Clears the question
             setCursor(0,0);
             print("A(4) B(3) C(2) D(1)"); // Displays options to choose from (Correct Answer: B)
@@ -81,7 +78,6 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
         }
         else if(k == 3){
             print("How many factors does 218 have?"); // Displays fourth question on LCD
-            HAL_Delay(5000);
             clear(); // Clears question
             setCursor(0,0);
             print("A(12) B(7) C(16) D(10)"); // Displays options to choose from (Correct Answer: C)
