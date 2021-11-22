@@ -176,7 +176,7 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
 
         clear();
         setCursor(0,0);
-        HAL_Delay(300);
+        HAL_Delay(400);
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
         HAL_Delay(2000);
