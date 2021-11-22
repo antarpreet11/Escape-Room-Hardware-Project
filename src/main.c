@@ -78,12 +78,13 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
 
         clear();
         setCursor(0,0);
-        HAL_Delay(300);
+        HAL_Delay(300); 
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
         HAL_Delay(2000);
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
+        // A blinking pattern is summoned after the question is completed
     }
 }
 
@@ -92,8 +93,8 @@ int keypad_control(int ans)
     InitializeKeypad(); 
     int xxx = 0;
     int right = 0;
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6); // Turns off the green LED in the beginning
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8); // Turns off the red LED in the beginning
     while (xxx < 3) // Allows for up to 3 attempts to select the right answer
     {
         while (ReadKeypad() < 0);   // wait for a valid key
