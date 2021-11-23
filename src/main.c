@@ -5,7 +5,7 @@
 
 void Initialize_Attempt();
 int keypad_control(int ans);
-void lcd_printing();
+int lcd_printing();
 void conclusion(int n);
 void lcda();
 
@@ -31,7 +31,7 @@ int main(void)
     InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // on-board LED
 
     SerialSetup(9600);
-    lcda();
+    lcd_printing();
 }
 
 void SysTick_Handler(void)
@@ -39,7 +39,7 @@ void SysTick_Handler(void)
     HAL_IncTick(); // tell HAL that a new tick has happened
 }
 
-void lcd_printing() //function designed to print to the LCD and execute the question/answers part of the project
+int lcd_printing() //function designed to print to the LCD and execute the question/answers part of the project
 {
     int answers[4] = {3 , 15, 7, 11};
     LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
@@ -88,6 +88,7 @@ void lcd_printing() //function designed to print to the LCD and execute the ques
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
         // A blinking pattern is summoned after the question is completed
     }
+    return 0;
 }
 
 int keypad_control(int ans)
@@ -142,7 +143,7 @@ void conclusion(int n)
 
 void lcda()
 {
-    LiquidCrystal(GPIOC, GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15);
+    LiquidCrystal(GPIOC, GPIO_PIN_10, GPIO_PIN_12, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15);
     setCursor(0,0);
     print("Hello");
 }
