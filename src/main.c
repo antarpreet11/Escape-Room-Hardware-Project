@@ -8,6 +8,8 @@ int keypad_control(int ans);
 int lcd_printing();
 void conclusion(int n);
 void lcda();
+void led_function1();
+void led_function2();
 
 #include <stdbool.h> // booleans, i.e. true and false
 #include <stdio.h>   // sprintf() function
@@ -19,19 +21,15 @@ int main(void)
 {
     HAL_Init(); // initialize the Hardware Abstraction Layer
 
-    // Peripherals (including GPIOs) are disabled by default to save power, so we
-    // use the Reset and Clock Control registers to enable the GPIO peripherals that we're using.
-
     __HAL_RCC_GPIOA_CLK_ENABLE(); // enable port A (for the on-board LsED, for example)
     __HAL_RCC_GPIOB_CLK_ENABLE(); // enable port B (for the rotary encoder inputs, for example)
     __HAL_RCC_GPIOC_CLK_ENABLE(); // enable port C (for the on-board blue pushbutton, for example)
 
-    // initialize the pins to be input, output, alternate function, etc...
-
     InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // on-board LED
 
     SerialSetup(9600);
-    lcd_printing();
+
+    lcd_printing(); // calling the most crucial function of the project
 }
 
 void SysTick_Handler(void)
@@ -42,6 +40,7 @@ void SysTick_Handler(void)
 int lcd_printing() //function designed to print to the LCD and execute the question/answers part of the project
 {
     int answers[4] = {3 , 15, 7, 11};
+
     LiquidCrystal(GPIOB, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6);
     setCursor(0,0);
     print("Welcome to Escape Room Games!");
@@ -102,38 +101,50 @@ int keypad_control(int ans)
     {
         while (ReadKeypad() < 0);   // wait for a valid key
         int input = ReadKeypad();
-        int j = 0;
         if (input == ans)  // top-right key in a 4x4 keypad, usually 'A'
-        {   while(j < 20)   // toggle LED on or off
-            {
-                HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
-	            HAL_Delay(50);
-	            HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
-	            HAL_Delay(50);
-                j++;
-            }
+        {   
             right = 1;
+            led_function1();
         }
         else if(input != ans)
         {
-            while(j < 15)   // toggle LED on or off
-            {
-                HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
-	            HAL_Delay(50);
-	            HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
-	            HAL_Delay(50);
-                j++;
-            }
+            led_function2();
         }
         if(right == 1)
         {
-            break; // If the correct answer is selected within the 3 attempts, the LED will flash and you cannot select anymore times
+            return right; // If the correct answer is selected within the 3 attempts, the LED will flash and you cannot select anymore times
         }    
         
         while (ReadKeypad() >= 0);  // wait until key is released
         xxx++;
     }
     return 0;
+}
+
+void led_function1()
+{
+    int j = 0;
+    while(j < 20)   // toggle LED on or off
+    {
+        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
+	    HAL_Delay(50);
+	    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_6);
+	    HAL_Delay(50);
+        j++;
+    }
+}
+
+void led_function2()
+{
+    int j = 0;
+    while(j < 15)   // toggle LED on or off
+    {
+        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
+	    HAL_Delay(50);
+	    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
+	    HAL_Delay(50);
+        j++;
+    }
 }
 
 void conclusion(int n)
