@@ -7,6 +7,7 @@ void Initialize_Attempt();
 int keypad_control(int ans);
 void lcd_printing();
 void conclusion(int n);
+void lcda();
 
 #include <stdbool.h> // booleans, i.e. true and false
 #include <stdio.h>   // sprintf() function
@@ -30,7 +31,7 @@ int main(void)
     InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // on-board LED
 
     SerialSetup(9600);
-    lcd_printing();
+    lcda();
 }
 
 void SysTick_Handler(void)
@@ -137,4 +138,11 @@ int keypad_control(int ans)
 void conclusion(int n)
 {
     
+}
+
+void lcda()
+{
+    LiquidCrystal(GPIOC, GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15);
+    setCursor(0,0);
+    print("Hello");
 }
