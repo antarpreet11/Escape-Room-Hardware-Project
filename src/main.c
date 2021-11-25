@@ -28,7 +28,6 @@ int main(void)
     InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // on-board LED
 
     SerialSetup(9600);
-
     lcd_printing(); // calling the most crucial function of the project
 }
 
@@ -145,11 +144,6 @@ void led_function2()
 	    HAL_Delay(50);
         j++;
     }
-}
-
-void conclusion(int n)
-{
-    
 }
 
 void lcda()
